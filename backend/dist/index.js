@@ -274,8 +274,8 @@ app.get("/testing", (req, res) => {
 //   res.json({ message: "Welcome to the API" });
 // });
 // Handle React Router (if using React Router)
-app.get("*", (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, "build", "index.html"));
+app.all("*", (req, res) => {
+  res.status(404).json({ error: "API route not found" });
 });
 console.log("cd pipeline check - 5th time....");
 // Enhanced error handling middleware
