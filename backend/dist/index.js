@@ -101,7 +101,7 @@ exports.io = new socket_io_1.Server(server, {
     origin: [
       "http://localhost:3000",
       "http://localhost:5173",
-      "https://your-frontend-domain.vercel.app" // ✅ add frontend domain here
+      "https://rentamigo-frontend.vercel.app/" // ✅ add frontend domain here
     ],
     methods: ["GET", "POST"],
     credentials: true
