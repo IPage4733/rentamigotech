@@ -97,11 +97,17 @@ const server = http_1.default.createServer(app);
 server.timeout = 300000; // 5 minutes
 // Initialize Socket.IO with correct CORS settings
 exports.io = new socket_io_1.Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-    },
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://your-frontend-domain.vercel.app" // ✅ add frontend domain here
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
+
 (0, connectToDb_1.connectToDatabase)()
     .then(() => console.log("Successfully connected to MongoDB"))
     .catch((error) => {
@@ -112,12 +118,17 @@ exports.io = new socket_io_1.Server(server, {
 // Serve static files from "build"
 app.use(express_1.default.static(path_1.default.join(__dirname, "build")));
 // cors
-app.use((0, cors_1.default)({
-    origin: ['http://localhost:3000', 'http://localhost:5173'], // Add your frontend URLs
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    credentials: false
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://rentamigo-frontend.vercel.app/' // ✅ ADD this
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
 }));
+
 // Configure express with proper types
 app.use(express_1.default.json({
     limit: "100mb", // Increase limit
@@ -153,7 +164,11 @@ const timeout = (req, res, next) => {
 app.use(timeout);
 // Configure CORS
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3000', // Your frontend URL
+     origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://rentamigo-frontend.vercel.app/' // ✅ ADD this
+  ], // Your frontend URL
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

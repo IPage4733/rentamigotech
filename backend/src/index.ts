@@ -124,10 +124,16 @@ server.timeout = 300000; // 5 minutes
 // Initialize Socket.IO with correct CORS settings
 export const io: Server = new Server(server, {
   cors: {
-    origin: "*",
+    origin: [
+      "http://localhost:3000",           // for local dev
+      "http://localhost:5173",           // if using Vite locally
+      "https://rentamigo-frontend.vercel.app/" // ✅ replace this with your actual deployed frontend domain
+    ],
     methods: ["GET", "POST"],
+    credentials: true // ✅ important for cookies/auth headers
   },
 });
+
 
 connectToDatabase()
   .then(() => console.log("Successfully connected to MongoDB"))
@@ -140,11 +146,16 @@ connectToDatabase()
 app.use(express.static(path.join(__dirname, "build")));
 // cors
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173'], // Add your frontend URLs
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://rentamigo-frontend.vercel.app/' // ✅ ADD this
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-  credentials: false
+  credentials: true
 }));
+
 
 // Configure express with proper types
 app.use(
@@ -196,11 +207,16 @@ app.use(timeout);
 
 // Configure CORS
 app.use(cors({
-  origin: 'http://localhost:3000', // Your frontend URL
-  credentials: true,
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://rentamigo-frontend.vercel.app/' // ✅ ADD this
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
 }));
+
 
 // Initialize all Socket.IO event handlers
 socketHandler(io);
