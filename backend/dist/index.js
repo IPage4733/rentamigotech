@@ -163,16 +163,6 @@ const timeout = (req, res, next) => {
 };
 app.use(timeout);
 // Configure CORS
-app.use((0, cors_1.default)({
-     origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://rentamigo-frontend.vercel.app/' // ✅ ADD this
-  ], // Your frontend URL
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
 // Initialize all Socket.IO event handlers
 (0, sockets_1.default)(exports.io);
 // Routes
