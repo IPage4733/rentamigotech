@@ -149,7 +149,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://rentamigo-frontend.vercel.app/' // ✅ ADD this
+    'https://rentamigo-frontend.vercel.app' // ✅ ADD this
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

@@ -90,19 +90,23 @@ const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
 if (missingEnvVars.length > 0) {
     throw new Error(`Missing required environment variables: ${missingEnvVars.join(", ")}`);
 }
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://rentamigo-frontend.vercel.app"
+];
+
 const app = (0, express_1.default)();
 // Create an HTTP server using the Express app
 const server = http_1.default.createServer(app);
 // Increase timeout
 server.timeout = 300000; // 5 minutes
 // Initialize Socket.IO with correct CORS settings
+const socket_io_1 = require("socket.io");
 exports.io = new socket_io_1.Server(server, {
   cors: {
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "https://rentamigo-frontend.vercel.app/" // ✅ add frontend domain here
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -118,14 +122,10 @@ exports.io = new socket_io_1.Server(server, {
 // Serve static files from "build"
 app.use(express_1.default.static(path_1.default.join(__dirname, "build")));
 // cors
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://rentamigo-frontend.vercel.app/' // ✅ ADD this
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+app.use((0, cors_1.default)({
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
   credentials: true
 }));
 
